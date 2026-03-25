@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Next Step.sn</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #00796B;
+    --teal-dark: #004D40;
+    --teal-light: #4DB6AC;
+    --sand: #FFF8F0;
+    --gold: #C9A84C;
+    --text: #1A1A1A;
+    --muted: #6B7280;
+    --white: #FFFFFF;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--sand);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 48px;
+    background: rgba(0,0,0,0.35);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: background 0.4s;
+  }
+  nav.scrolled { background: var(--teal-dark); }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    color: var(--white);
+    font-weight: 700;
+    letter-spacing: 0.03em;
+  }
+  .nav-logo span { color: var(--gold); }
+
+  .nav-links { display: flex; gap: 32px; }
+  .nav-links a {
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+
+  /* ── HERO ── */
+  #accueil {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background: url('https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1600&q=80') center/cover no-repeat;
+    transform: scale(1.05);
+    animation: zoomOut 12s ease forwards;
+  }
+
+  @keyframes zoomOut {
+    from { transform: scale(1.1); }
+    to   { transform: scale(1.0); }
+  }
+
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(160deg, rgba(0,77,64,0.72) 0%, rgba(0,0,0,0.55) 100%);
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: var(--white);
+    padding: 0 24px;
+    animation: fadeUp 1s ease 0.3s both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-tag {
+    display: inline-block;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 6px 18px;
+    margin-bottom: 28px;
+    border-radius: 2px;
+  }
+
+  .hero-content h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 8vw, 6.5rem);
+    font-weight: 900;
+    line-height: 1.0;
+    margin-bottom: 20px;
+    letter-spacing: -0.01em;
+  }
+
+  .hero-content h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .hero-content p {
+    font-size: 1.15rem;
+    font-weight: 300;
+    color: rgba(255,255,255,0.8);
+    max-width: 480px;
+    margin: 0 auto 40px;
+    line-height: 1.7;
+  }
+
+  .hero-cta {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--teal-dark);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 16px 40px;
+    transition: background 0.25s, transform 0.2s;
+  }
+  .hero-cta:hover { background: #fff; transform: translateY(-2px); }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255,255,255,0.5);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .scroll-hint::after {
+    content: '';
+    display: block;
+    width: 1px;
+    height: 40px;
+    background: rgba(255,255,255,0.3);
+    animation: scrollLine 1.8s ease infinite;
+  }
+  @keyframes scrollLine {
+    0%   { transform: scaleY(0); transform-origin: top; }
+    50%  { transform: scaleY(1); transform-origin: top; }
+    51%  { transform: scaleY(1); transform-origin: bottom; }
+    100% { transform: scaleY(0); transform-origin: bottom; }
+  }
+
+  /* ── SECTION BASE ── */
+  .section {
+    padding: 100px 48px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--teal);
+    font-weight: 500;
+    margin-bottom: 14px;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--teal-dark);
+    margin-bottom: 32px;
+  }
+
+  /* ── HISTOIRE ── */
+  #histoire-section {
+    background: var(--white);
+    border-radius: 0;
+    padding: 0;
+  }
+
+  .histoire-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 520px;
+  }
+
+  .histoire-img {
+    background: url('https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=800&q=80') center/cover no-repeat;
+    min-height: 400px;
+  }
+
+  .histoire-text {
+    padding: 80px 64px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .histoire-text p {
+    color: var(--muted);
+    line-height: 1.9;
+    font-size: 1rem;
+    margin-bottom: 12px;
+  }
+
+  /* ── MISSION ── */
+  #apropos-section {
+    background: var(--teal-dark);
+    color: var(--white);
+    padding: 100px 48px;
+  }
+
+  .mission-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .mission-quote {
+    font-family: 'Playfair Display', serif;
+    font-size: 5rem;
+    color: var(--teal-light);
+    line-height: 1;
+    opacity: 0.3;
+  }
+
+  .mission-body .section-label { color: var(--teal-light); }
+  .mission-body .section-title { color: var(--white); }
+  .mission-body p { color: rgba(255,255,255,0.7); line-height: 1.9; font-size: 1rem; }
+
+  .pilliers {
+    display: flex;
+    gap: 24px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+  }
+
+  .pillier {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    padding: 20px 24px;
+    flex: 1;
+    min-width: 140px;
+  }
+
+  .pillier-icon { font-size: 1.6rem; margin-bottom: 10px; }
+  .pillier-name {
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--gold);
+  }
+
+  /* ── ACTIVITÉS ── */
+  #activites-section {
+    padding: 100px 48px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .activites-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 48px;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  #listeActivites {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+    margin-bottom: 56px;
+  }
+
+  .activite-card {
+    background: var(--white);
+    border-top: 3px solid var(--teal);
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s, box-shadow 0.25s;
+    animation: cardIn 0.5s ease both;
+  }
+
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .activite-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.08); }
+
+  .activite-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 80px; height: 80px;
+    background: var(--teal);
+    opacity: 0.04;
+    border-radius: 50% 0 0 0;
+  }
+
+  .activite-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    color: var(--teal-dark);
+    margin-bottom: 12px;
+  }
+
+  .activite-card p { color: var(--muted); line-height: 1.7; font-size: 0.95rem; }
+
+  .activite-card .card-num {
+    position: absolute;
+    top: 20px; right: 24px;
+    font-size: 2.5rem;
+    font-family: 'Playfair Display', serif;
+    color: var(--teal);
+    opacity: 0.1;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  /* ── FORMULAIRE AJOUT ── */
+  .add-form {
+    background: var(--white);
+    padding: 48px;
+    border-left: 4px solid var(--gold);
+    max-width: 640px;
+  }
+
+  .add-form h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: var(--teal-dark);
+    margin-bottom: 28px;
+  }
+
+  .form-group { margin-bottom: 20px; }
+
+  .form-group label {
+    display: block;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    border: 1px solid #E0E0E0;
+    padding: 14px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    color: var(--text);
+    background: var(--sand);
+    outline: none;
+    transition: border-color 0.2s;
+    resize: vertical;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus { border-color: var(--teal); }
+
+  .form-group textarea { min-height: 110px; }
+
+  .btn-add {
+    background: var(--teal-dark);
+    color: var(--white);
+    border: none;
+    padding: 16px 40px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .btn-add:hover { background: var(--teal); transform: translateY(-2px); }
+
+  /* ── CONTACT ── */
+  #contact-section {
+    background: linear-gradient(135deg, #004D40 0%, #00695C 100%);
+    padding: 100px 48px;
+    text-align: center;
+  }
+
+  .contact-inner { max-width: 600px; margin: 0 auto; }
+  .contact-inner .section-label { color: var(--teal-light); }
+  .contact-inner .section-title { color: var(--white); }
+
+  .contact-email {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 1.2rem;
+    color: var(--gold);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    border-bottom: 1px solid rgba(201,168,76,0.4);
+    padding-bottom: 4px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .contact-email:hover { color: #fff; border-color: #fff; }
+
+  .contact-divider {
+    width: 48px;
+    height: 2px;
+    background: var(--gold);
+    margin: 32px auto;
+  }
+
+  .contact-desc { color: rgba(255,255,255,0.65); line-height: 1.8; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #011A16;
+    color: rgba(255,255,255,0.4);
+    text-align: center;
+    padding: 28px 24px;
+    font-size: 0.82rem;
+    letter-spacing: 0.05em;
+  }
+
+  footer span { color: var(--gold); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .nav-links { gap: 18px; }
+    .histoire-grid { grid-template-columns: 1fr; }
+    .histoire-img { min-height: 280px; }
+    .histoire-text { padding: 48px 32px; }
+    .mission-inner { grid-template-columns: 1fr; gap: 24px; }
+    .mission-quote { display: none; }
+    .section, #activites-section { padding: 72px 24px; }
+    #apropos-section { padding: 72px 24px; }
+    #contact-section { padding: 72px 24px; }
+    .add-form { padding: 32px 24px; }
+    .activites-header { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-logo">Next<span>Step</span>.sn</div>
+  <div class="nav-links">
+    <a href="#accueil">Accueil</a>
+    <a href="#histoire-section">Histoire</a>
+    <a href="#activites-section">Activités</a>
+    <a href="#contact-section">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="accueil">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-tag">Dakar, Sénégal · Since 2024</div>
+    <h1>La prochaine<br><em>étape</em> commence<br>ici.</h1>
+    <p>Accompagner les jeunes vers un avenir éclairé, à travers l'éducation, l'engagement et la solidarité.</p>
+    <a href="#histoire-section" class="hero-cta">Découvrir notre mission</a>
+  </div>
+  <div class="scroll-hint">Défiler</div>
+</section>
+
+<!-- HISTOIRE -->
+<div id="histoire-section">
+  <div class="histoire-grid">
+    <div class="histoire-img"></div>
+    <div class="histoire-text">
+      <div class="section-label">Notre histoire</div>
+      <h2 class="section-title">Une vision née<br>d'une conviction</h2>
+      <p id="histoire">
+        Next Step est née d'une vision : celle d'aider les jeunes à franchir une nouvelle étape dans leur vie.
+        Face aux défis de la jeunesse africaine, nous croyons que chaque jeune mérite un espace pour grandir, apprendre et s'épanouir.
+      </p>
+      <p>Depuis notre création, nous avons accompagné des centaines de jeunes Dakarois dans leur développement personnel, éducatif et civique.</p>
+    </div>
+  </div>
+</div>
+
+<!-- APROPOS / MISSION -->
+<div id="apropos-section">
+  <div class="mission-inner">
+    <div class="mission-quote">"</div>
+    <div class="mission-body">
+      <div class="section-label">À propos</div>
+      <h2 class="section-title">Notre raison<br>d'être</h2>
+      <p>Notre mission est de développer la jeunesse à travers des activités éducatives, sociales et environnementales. Nous croyons en une jeunesse engagée, créative et responsable — prête à bâtir le Sénégal de demain.</p>
+      <div class="pilliers">
+        <div class="pillier">
+          <div class="pillier-icon">📚</div>
+          <div class="pillier-name">Éducation</div>
+        </div>
+        <div class="pillier">
+          <div class="pillier-icon">🤝</div>
+          <div class="pillier-name">Social</div>
+        </div>
+        <div class="pillier">
+          <div class="pillier-icon">🌿</div>
+          <div class="pillier-name">Environnement</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ACTIVITÉS -->
+<div id="activites-section">
+  <div class="activites-header">
+    <div>
+      <div class="section-label">Ce que nous faisons</div>
+      <h2 class="section-title">Nos Activités</h2>
+    </div>
+  </div>
+
+  <div id="listeActivites"></div>
+
+  <div class="add-form">
+    <h3>Ajouter une activité</h3>
+    <div class="form-group">
+      <label for="titre">Titre de l'activité</label>
+      <input type="text" id="titre" placeholder="Ex : Atelier de mentorat">
+    </div>
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea id="description" placeholder="Décrivez l'activité en quelques lignes..."></textarea>
+    </div>
+    <button class="btn-add" onclick="ajouterActivite()">Ajouter l'activité</button>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<div id="contact-section">
+  <div class="contact-inner">
+    <div class="section-label">Nous joindre</div>
+    <h2 class="section-title">Travaillons<br>ensemble</h2>
+    <div class="contact-divider"></div>
+    <p class="contact-desc">Vous avez un projet, une idée, ou vous souhaitez rejoindre notre communauté ? Nous serions ravis d'échanger avec vous.</p>
+    <br><br>
+    <a href="mailto:contact@nextstep.sn" class="contact-email">contact@nextstep.sn</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  © 2026 <span>Next Step.sn</span> — La prochaine étape vers un avenir meilleur
+</footer>
+
+<script>
+  // Navbar scroll effect
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 80);
+  });
+
+  // Ajouter une activité
+  let count = 0;
+  function ajouterActivite() {
+    const titre = document.getElementById("titre").value.trim();
+    const description = document.getElementById("description").value.trim();
+    if (!titre) { document.getElementById("titre").focus(); return; }
+    count++;
+
+    const card = document.createElement("div");
+    card.className = "activite-card";
+    card.innerHTML = `
+      <div class="card-num">${String(count).padStart(2,'0')}</div>
+      <h3>${titre}</h3>
+      <p>${description || "Aucune description fournie."}</p>
+    `;
+    document.getElementById("listeActivites").appendChild(card);
+    document.getElementById("titre").value = "";
+    document.getElementById("description").value = "";
+
+    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  // Allow Enter to submit title field
+  document.getElementById("titre").addEventListener("keydown", e => {
+    if (e.key === "Enter") document.getElementById("description").focus();
+  });
+</script>
+</body>
+</html>
